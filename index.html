@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D 點圖形繪製</title>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+</head>
+<body>
+
+<div id="plot" style="width: 600px; height: 600px;"></div>
+
+<script>
+    function parseCoordinates(coor) {
+        return coor.split(',').map(pair => pair.split('_').map(Number));
+    }
+
+    function init() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const coor = urlParams.get('coor');
+        if (!coor) return;
+
+        const points = parseCoordinates(coor);
+
+        // 分離 X 和 Y 坐標
+        const xValues = points.map(p => p[0]);
+        const yValues = points.map(p => p[1]);
+
+        const trace = {
+            x: xValues,
+            y: yValues,
+            mode: 'markers',
+            type: 'scatter',
+            marker: { size: 10, color: 'red' }
+        };
+
+        const layout = {
+            xaxis: { title: 'X', zeroline: true },
+            yaxis: { title: 'Y', zeroline: true },
+            grid: { rows: 1, columns: 1, pattern: 'independent' },
+            showlegend: false
+        };
+
+        Plotly.newPlot('plot', [trace], layout);
+    }
+
+    // 初始化繪製
+    init();
+</script>
+
+</body>
+</html>
